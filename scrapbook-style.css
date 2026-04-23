@@ -1,0 +1,184 @@
+body {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background-color: #F5F2ED; /* Para match sa theme bago pa mag-load ang swiper */
+}
+
+.font-serif {
+    font-family: 'Playfair Display', serif;
+}
+
+/* Updated Paper Texture Layer */
+.swiper-slide::before {
+    content: "";
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    /* Ginamitan ko ng mas kitang fiber texture */
+    background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
+    opacity: 0.45; /* Bahagyang tinaasan para mas ramdam ang texture */
+    pointer-events: none;
+    z-index: 50;
+    /* Secret weapon para magmukhang totoo ang papel */
+    mix-blend-mode: multiply; 
+}
+
+/* Vignette Effect para magmukhang may depth ang bawat page */
+.swiper-slide::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle, transparent 70%, rgba(74, 63, 53, 0.05) 100%);
+    pointer-events: none;
+    z-index: 40;
+}
+
+/* Swiper Pagination Styling */
+.swiper-pagination-progressbar {
+    background: rgba(74, 63, 53, 0.05) !important;
+    height: 3px !important;
+    top: auto !important;
+    bottom: 0 !important;
+}
+
+.swiper-pagination-progressbar-fill {
+    background: #4A3F35 !important;
+}
+
+/* Draggable/Clickable Cursor Effect */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Smooth Flip/Swap Transition */
+.transition-all {
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy professional feel */
+}
+
+/* Smooth Fade/Slide Animation for content */
+.swiper-slide-active h1, 
+.swiper-slide-active h2,
+.swiper-slide-active p, 
+.swiper-slide-active img,
+.swiper-slide-active .polaroid-stack {
+    animation: slideUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px) scale(0.98); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+    }
+}
+
+.back-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 100; /* Pinaka-ibabaw sa lahat */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #4A3F35; /* Espresso color */
+    font-size: 11px;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: rgba(253, 252, 251, 0.6); /* Semi-transparent cream */
+    padding: 8px 12px;
+    border-radius: 2px;
+    backdrop-filter: blur(5px); /* Professional glassmorphism feel */
+    border: 1px solid rgba(74, 63, 53, 0.1);
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background: rgba(74, 63, 53, 0.05);
+    transform: translateX(-5px); /* Slight movement effect */
+    color: #8D7B68; /* Lighter coffee tone on hover */
+}
+
+.back-button svg {
+    opacity: 0.7;
+}
+
+/* Para hindi matakpan ng button ang content sa mobile */
+@media (max-width: 640px) {
+    .back-button {
+        top: 15px;
+        left: 15px;
+        font-size: 9px;
+        padding: 6px 10px;
+    }
+}
+.swipe-guide {
+    position: fixed;
+    bottom: 15%; /* Bahagyang mas mataas para hindi takpan ang pagination bar */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    pointer-events: none;
+    transition: opacity 0.5s ease; /* Ito ang mahalaga para sa smooth fade out */
+}
+
+/* Dagdag na styling para sa hand icon kung wala pa */
+.hand-icon {
+    animation: swipeAnim 2.5s infinite ease-in-out;
+}
+
+@keyframes swipeAnim {
+    0% { transform: translateX(40px); opacity: 0; }
+    50% { transform: translateX(-40px); opacity: 1; }
+    100% { transform: translateX(-70px); opacity: 0; }
+}
+
+.music-player {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 100;
+}
+
+.music-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(253, 252, 251, 0.6);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(74, 63, 53, 0.1);
+    padding: 8px 15px;
+    border-radius: 50px; /* Capsule shape para mas modern */
+    color: #4A3F35;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.music-btn:hover {
+    background: rgba(74, 63, 53, 0.05);
+    transform: scale(1.05);
+}
+
+/* Music Pulsing Animation kapag nag-p-play */
+.music-btn.playing svg {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
