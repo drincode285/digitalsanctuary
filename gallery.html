@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Digital Sanctuary | Gallery</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+
+    <style>
+        [x-cloak] { display: none !important; }
+        :root {
+            --brand-brown: #5D4037;
+            --accent-brown: #A67B5B;
+            --bg-cream: #FDF8F5;
+        }
+        body { background-color: var(--bg-cream); color: var(--brand-brown); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .cursive { font-family: 'Dancing Script', cursive; }
+        .glass {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 2rem;
+            box-shadow: 0 10px 30px rgba(93, 64, 55, 0.05);
+        }
+        .bg-grid {
+            background-image: radial-gradient(var(--accent-brown) 0.8px, transparent 0.8px);
+            background-size: 30px 30px;
+            opacity: 0.1;
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body x-data="galleryApp" x-init="init()" class="min-h-screen">
+
+    <div class="bg-grid"></div>
+
+    <audio id="gallery-music" loop>
+        <source src="gallery-music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="max-w-5xl mx-auto px-6 py-12">
+        <div class="flex flex-col items-center mb-16">
+            <a href="index.html" class="mb-8 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 text-[#A67B5B] text-xs font-bold tracking-widest hover:bg-white transition-all shadow-sm">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> BACK TO SANCTUARY
+            </a>
+            <h1 class="cursive text-6xl text-[#5D4037]">Our Memories</h1>
+            <p class="text-[#A67B5B] uppercase tracking-[0.3em] text-[10px] mt-4 font-semibold italic">Collection of our favorite moments</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <template x-for="album in albums" :key="album.id">
+                <div @click="openAlbum(album)" class="glass overflow-hidden cursor-pointer group hover:shadow-2xl transition-all duration-500">
+                    <div class="h-56 overflow-hidden relative">
+                        <img :src="album.cover" :alt="album.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all"></div>
+                    </div>
+                    <div class="p-6 flex justify-between items-center bg-white/50">
+                        <span class="font-semibold text-sm tracking-wide" x-text="album.name"></span>
+                        <div class="p-2 bg-[#A67B5B] text-white rounded-full">
+                            <i data-lucide="folder-heart" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <div x-show="activeAlbum" x-cloak 
+             class="fixed inset-0 z-50 bg-[#FDF8F5]/98 backdrop-blur-xl flex flex-col p-6"
+             x-transition:enter="transition duration-300"
+             x-transition:enter-start="opacity-0">
+            
+            <div class="flex justify-between items-center mb-8 max-w-6xl mx-auto w-full">
+                <div>
+                    <h2 class="cursive text-4xl text-[#5D4037]" x-text="activeAlbum?.name"></h2>
+                    <p class="text-xs text-[#A67B5B] tracking-widest uppercase mt-1">Scroll to view images</p>
+                </div>
+                <button @click="activeAlbum = null" class="p-4 bg-[#5D4037] text-white rounded-full hover:rotate-90 transition-all duration-300">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto max-w-6xl mx-auto w-full pb-20">
+                <div class="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6">
+                    <template x-if="activeAlbum" x-for="img in activeAlbum.images">
+                        <div class="break-inside-avoid rounded-2xl overflow-hidden shadow-lg border-4 border-white">
+                            <img :src="img" class="w-full h-auto object-cover hover:scale-105 transition-all duration-500">
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('galleryApp', () => ({
+                activeAlbum: null,
+                
+                // DITO MO I-EEDIT ANG MGA ALBUMS MO
+                albums: [
+                    { 
+                        id: 1, 
+                        name: 'The Beginning', 
+                        cover: 'album1-cover.jpg', 
+                        images: ['img1.jpg', 'img2.jpg', 'img3.jpg'] 
+                    },
+                    { 
+                        id: 2, 
+                        name: 'Our Travels', 
+                        cover: 'album2-cover.jpg', 
+                        images: ['img4.jpg', 'img5.jpg'] 
+                    },
+                    { 
+                        id: 3, 
+                        name: 'Random Joys', 
+                        cover: 'album3-cover.jpg', 
+                        images: ['img6.jpg', 'img7.jpg', 'img8.jpg'] 
+                    }
+                ],
+
+                init() {
+                    lucide.createIcons();
+                    // Play music automatically when user enters the page
+                    // Note: Most browsers require a click, so music might play after first interaction
+                    const music = document.getElementById('gallery-music');
+                    if (music) {
+                        music.volume = 0.3;
+                        music.play().catch(() => console.log("Waiting for user interaction..."));
+                    }
+                },
+
+                openAlbum(album) {
+                    this.activeAlbum = album;
+                    setTimeout(() => lucide.createIcons(), 50);
+                }
+            }));
+        });
+    </script>
+</body>
+</html>
